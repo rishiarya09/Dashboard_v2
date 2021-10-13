@@ -1,0 +1,4 @@
+{
+  "connectionString": "mongodb://localhost:27017/dashboard_db",
+  "TOKEN": "juturu_technologies"
+}

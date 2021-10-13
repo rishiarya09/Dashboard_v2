@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const config_json = require("../config.json");
 
-const config = process.env;
+const config = process.env || config_json.TOKEN_KEY;
 const verifyToken = (req, res, next) => {
   const token = req.headers["x-access-token"];
   if (!token) {

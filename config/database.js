@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-
-const { MONGO_URI } = process.env;
+const config = require("../config.json");
+const MONGO_URI = process.env.MONGODB_URI || config.connectionString;
 
 exports.connect = () => {
   // Connecting to the database
@@ -10,12 +10,9 @@ exports.connect = () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
       useFindAndModify: false,
-      ssl: true,
-      sslCA: `${__dirname}/ca-certificate.crt`,
     })
     .then(() => {
       console.log("Successfully connected to database");
-      console.log(`${__dirname}`);
     })
     .catch((error) => {
       console.log("database connection failed. exiting now...");
