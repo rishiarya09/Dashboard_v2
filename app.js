@@ -54,7 +54,8 @@ app.use((error, req, res, next) => {
   return res;
 });
 
-const port = process.env.PORT || 8000;
+const port =
+  process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 4000;
 
 app.listen(port, (err) => {
   if (err) {
