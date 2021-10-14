@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("../config.json");
+require("rootpath")();
 const MONGO_URI = process.env.MONGODB_URI || config.connectionString;
 
 exports.connect = () => {

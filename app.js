@@ -1,4 +1,5 @@
-require("dotenv").config();
+// require("dotenv").config();
+require("rootpath")();
 require("./config/database").connect();
 const express = require("express");
 const auth = require("./middileware/auth");
