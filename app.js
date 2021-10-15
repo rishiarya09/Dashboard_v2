@@ -29,7 +29,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
-app.post("/api/register", auth, register);
+app.post("/api/register", register);
 app.post("/api/login", login);
 app.post("/api/resetPassword", auth, resetPassword);
 app.get("/api/users/:id", auth, getUsers);
