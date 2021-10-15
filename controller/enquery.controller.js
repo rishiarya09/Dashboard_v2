@@ -245,12 +245,12 @@ exports.shopCreate = async (req, res, next) => {
       shop_address: shop_address,
       shop_phone_number: shop_phone_number,
     });
-    if (!users) {
+    if (!shop) {
       const error = new Error(`Something wrong`);
       error.statusCode = 400;
       throw error;
     }
-    return res.status(200).json(users);
+    return res.status(200).json({ message: "SHop created successfully" });
   } catch (err) {
     if (err) {
       if (!err.statusCode) {
