@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
     return res.status(403).send("A token is required for authentication");
   }
   try {
-    const decoded = jwt.verify(token, config.TOKEN_KEY, (err, verifiedJwt) => {
+    const decoded = jwt.verify(token, config, (err, verifiedJwt) => {
       if (err) {
         res.send(err.message);
       }
