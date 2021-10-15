@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const Shop = require("../model/shop");
 const Customer = require("../model/customer");
 const Enquery = require("../model/enquery");
+const config_json = require("../config.json");
+const token = process.env.TOKEN_KEY || config_json.TOKEN;
 
 exports.register = async (req, res, next) => {
   try {
@@ -69,11 +71,9 @@ exports.register = async (req, res, next) => {
       status: status,
     });
 
-    const token = jwt.sign(
-      { user_id: user._id, email },
-      process.env.TOKEN_KEY,
-      { expiresIn: "20m" }
-    );
+    const token = jwt.sign({ user_id: user._id, email }, token, {
+      expiresIn: "20m",
+    });
     let final_user = {
       first_name: user.first_name,
       last_name: user.last_name,
@@ -111,11 +111,9 @@ exports.login = async (req, res, next) => {
     }
     const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.TOKEN_KEY,
-        { expiresIn: "1200000" }
-      );
+      const token = jwt.sign({ user_id: user._id, email }, token, {
+        expiresIn: "1200000",
+      });
       if (user.status == "disable") {
         const error = new Error(`User has been disabled`);
         error.statusCode = 400;
@@ -201,7 +199,7 @@ exports.refreshToken = async (req, res, next) => {
     const verify = await User.find({ _id: user });
     const email = verify.email;
     if (verify) {
-      const token = jwt.sign({ user_id: user, email }, process.env.TOKEN_KEY, {
+      const token = jwt.sign({ user_id: user, email }, token, {
         expiresIn: "1200000",
       });
       return res.status(200).json({
