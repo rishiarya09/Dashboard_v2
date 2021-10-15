@@ -33,7 +33,7 @@ app.post("/api/register", register);
 app.post("/api/login", login);
 app.post("/api/resetPassword", auth, resetPassword);
 app.get("/api/users/:id", auth, getUsers);
-app.get("/api/getShops", auth, getshops);
+app.get("/api/getShops", getshops);
 app.post("/api/createShops", auth, shopCreate);
 app.post("/api/disableProfile/:id", auth, disableProfile);
 app.post("/api/editUser", auth, editUsers);
