@@ -5,7 +5,7 @@ const Shop = require("../model/shop");
 const Customer = require("../model/customer");
 const Enquery = require("../model/enquery");
 const config_json = require("../config.json");
-const token = process.env.TOKEN_KEY || config_json.TOKEN;
+const Token_env = process.env.TOKEN_KEY || config_json.TOKEN;
 
 exports.register = async (req, res, next) => {
   try {
@@ -71,7 +71,7 @@ exports.register = async (req, res, next) => {
       status: status,
     });
 
-    const token = jwt.sign({ user_id: user._id, email }, token, {
+    const token = jwt.sign({ user_id: user._id, email }, Token_env, {
       expiresIn: "20m",
     });
     let final_user = {
@@ -111,7 +111,7 @@ exports.login = async (req, res, next) => {
     }
     const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ user_id: user._id, email }, token, {
+      const token = jwt.sign({ user_id: user._id, email }, Token_env, {
         expiresIn: "1200000",
       });
       if (user.status == "disable") {
@@ -199,7 +199,7 @@ exports.refreshToken = async (req, res, next) => {
     const verify = await User.find({ _id: user });
     const email = verify.email;
     if (verify) {
-      const token = jwt.sign({ user_id: user, email }, token, {
+      const token = jwt.sign({ user_id: user, email }, Token_env, {
         expiresIn: "1200000",
       });
       return res.status(200).json({
