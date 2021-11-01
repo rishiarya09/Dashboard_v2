@@ -144,8 +144,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
         }
         return res.status(200).json(enqueries);
       }
-
-      if (salesmen_exists && salesmen_exists.role === "m") {
+      if (salesmen_exists && salesmen_exists[0].role === "m") {
         var enqueries = await Enquery.find({
           shop_id: salesmen_exists.shop_id,
           date_of_entry: date,
@@ -158,7 +157,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
         return res.status(200).json(enqueries);
       }
 
-      if (salesmen_exists && salesmen_exists.role === "a") {
+      if (salesmen_exists && salesmen_exists[0].role === "a") {
         var enqueries = await Enquery.find({
           date_of_entry: date,
         }).populate(["customer_id", "salesmen_id"]);
