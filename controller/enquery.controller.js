@@ -61,7 +61,7 @@ exports.createEnquiries = async (req, res, next) => {
 exports.updateEnquries = async (req, res, next) => {
   try {
     const req_body = req.body;
-    const { _id, status, products, logs, salesmen_id } = req_body;
+    const { _id, status, products, logs, salesmen_id, remarks } = req_body;
     const { name, phone_no, address, city } = req_body.customer_id;
     const cust_id = req_body.customer_id;
     let query_role = await User.find({
@@ -87,13 +87,13 @@ exports.updateEnquries = async (req, res, next) => {
     if (query_role[0].role === "m") {
       var new_log = logs.length != 0 ? logs : [];
       // new_log.push(log);
-      console.log(new_log);
       edit_enquery = await Enquery.findOneAndUpdate(
         { _id: _id },
         {
           logs: new_log,
           products: products,
           status: status,
+          remarks: remarks,
         },
         { new: true }
       );
@@ -103,6 +103,7 @@ exports.updateEnquries = async (req, res, next) => {
         {
           products: products,
           status: status,
+          remarks: remarks,
         },
         { new: true }
       );
@@ -135,7 +136,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
         var enqueries = await Enquery.find({
           salesmen_id: salesmen_id,
           date_of_entry: date,
-        }).populate("customer_id");
+        }).populate(["customer_id", "salesmen_id"]);
         if (!enqueries) {
           const error = new Error(`Something wrong`);
           error.statusCode = 400;
@@ -148,7 +149,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
         var enqueries = await Enquery.find({
           shop_id: salesmen_exists.shop_id,
           date_of_entry: date,
-        }).populate("customer_id");
+        }).populate(["customer_id", "salesmen_id"]);
         if (!enqueries) {
           const error = new Error(`Something wrong`);
           error.statusCode = 400;
@@ -160,7 +161,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
       if (salesmen_exists && salesmen_exists.role === "a") {
         var enqueries = await Enquery.find({
           date_of_entry: date,
-        }).populate("customer_id");
+        }).populate(["customer_id", "salesmen_id"]);
         if (!enqueries) {
           const error = new Error(`Something wrong`);
           error.statusCode = 400;
@@ -169,7 +170,7 @@ exports.getTodaysEnquiries = async (req, res, next) => {
         return res.status(200).json(enqueries);
       }
     }
-  } catch {
+  } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -195,17 +196,20 @@ exports.getEnquiries = async (req, res, next) => {
     if (role[0].role === "m") {
       var enqueries = await Enquery.find({
         shop_id: shop_id,
-      }).populate("customer_id");
+      }).populate(["customer_id", "salesmen_id"]);
       return res.json(enqueries);
     } else if (role[0].role === "a") {
-      var enqueries = await Enquery.find().populate("customer_id");
+      var enqueries = await Enquery.find().populate([
+        "customer_id",
+        "salesmen_id",
+      ]);
 
       return res.json(enqueries);
     } else {
       var enqueries = await Enquery.find({
         salesmen_id: salesmen_id,
         "products.date": date,
-      }).populate("customer_id");
+      }).populate(["customer_id", "salesmen_id"]);
       return res.status(200).json(enqueries);
     }
   } catch (err) {
