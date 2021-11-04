@@ -207,7 +207,7 @@ exports.getEnquiries = async (req, res, next) => {
     } else {
       var enqueries = await Enquery.find({
         salesmen_id: salesmen_id,
-        "products.date": date,
+        "products.end_date": date,
       }).populate(["customer_id", "salesmen_id"]);
       return res.status(200).json(enqueries);
     }
