@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   address: { type: String },
   city: { type: String },
   status: { type: String },
-  phone_no: { type: String },
+  phone_no: { type: Number },
   city: { type: String },
   address: { type: String },
 });
